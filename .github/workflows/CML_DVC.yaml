@@ -1,4 +1,4 @@
-name: churn-imbalanced-dvc
+name: churn-imbalanced-dataset-dvc
 on: [push]
 permissions: write-all
 jobs:
@@ -15,24 +15,31 @@ jobs:
       - uses: iterative/setup-cml@v1
 
 
-
       - name: Prepare Environment
+        env:
+          GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
+
         run: |
+          # Your ML workflow goes here
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          
+          echo "${{ secrets.GDRIVE_CREDENTIALS_DATA }}" > gdrive-service-account.json
 
-      - name: Setup DVC
-        run: |
-          echo "${{ secrets.GDRIVE_CREDENTIALS }}" > gdrive-service-account.json
-          dvc remote modify myremote gdrive_service_account_json_file gdrive-service-account.json
+          # Configure DVC with the Google Drive service account credentials
+          dvc remote add -d myremote gdrive://1Jvkdcrz6qzsMos5noFWARI1kYy_DQ9Ay
+          dvc remote modify myremote gdrive_service_account_file gdrive-service-account.json
+
           dvc pull
           python main.py
-          # dvc add ./data/ ./models/
-          # dvc push
+          dvc add ./data/ ./models/
+          dvc push 
+
 
       - name: Generate Report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
         run: |
 
           # Get the report
