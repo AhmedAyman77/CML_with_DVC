@@ -1,3 +1,4 @@
 /data
 /models
 /CML_DVC_env
+*.json

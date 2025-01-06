@@ -15,6 +15,7 @@ git add .
 git commit -m "initial commit"
 git remote add origin <ssh or http link>
 git push
+
 git pull
 git status
 ```
@@ -24,10 +25,17 @@ git status
 dvc init
 dvc add data.csv
 dvc remote add --default myremote gdrive://<fodler-id> # if using gdrive
+# to push without asking for authentication
+dvc remote modify your_dvc_remote_name gdrive_use_service_account true
+dvc remote modify your_dvc_remote_name gdrive_service_account_json_file_path "path/to/json/file"
 dvc push
+
 dvc status
-dvc pull
 dvc doctor
+
+# to get the original folders/files
+dvc pull
+
 ```
 
 
