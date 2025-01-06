@@ -1,70 +1,41 @@
-name: churn-imbalanced-dataset-dvc
-
+name: churn-imbalanced-dvc
 on: [push]
-
 permissions: write-all
-
 jobs:
   run:
     runs-on: ubuntu-latest
-
     steps:
-      # Checkout the repository
       - uses: actions/checkout@v3
-
-      # Set up Node.js environment
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
-
-      # Set up Python environment
       - uses: actions/setup-python@v4
         with:
           python-version: '3.x'
-
-      # Set up CML (Continuous Machine Learning)
       - uses: iterative/setup-cml@v1
 
-      # Prepare Environment
+
       - name: Prepare Environment
         env:
           GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
         run: |
+          # Your ML workflow goes here
           python -m pip install --upgrade pip
-          
-          # Install dependencies from requirements.txt
           pip install -r requirements.txt
-
-          # Install DVC with Google Drive support
-          pip install dvc[gs]
-
-          # Save the credentials data to a JSON file
-          echo "${{ secrets.GDRIVE_CREDENTIALS_DATA }}" > gdrive-service-account.json
-
-          # Set up DVC remote for Google Drive
-          if ! dvc remote list | grep -q "myremote"; then
-            dvc remote add -d myremote gdrive://1Jvkdcrz6qzsMos5noFWARI1kYy_DQ9Ay
-          fi
-
-          # Authenticate using service account credentials
-          dvc remote modify myremote gdrive_use_service_account true
-          dvc remote modify myremote gdrive_service_account_json gdrive-service-account.json
-
-          # Pull data from the remote
           dvc pull
-
-          # Run your code, add outputs, and push changes
           python main.py
           dvc add ./data/ ./models/
-          dvc push 
+          dvc push
 
-      # Generate Report
       - name: Generate Report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Create a report
+
+          # Get the report
           echo "## Metrics" > report.md
+          # cat metrics.txt >> report.md
+          
           awk 'NR%4{print "    " $0}{print ""}' metrics.txt >> report.md
 
           echo "## Confusion Matrix" >> report.md
