@@ -44,7 +44,7 @@ jobs:
 
           # Check if the remote already exists. If not, add it. If it exists, just modify it.
           if ! dvc remote list | grep -q "myremote"; then
-            dvc remote add -d myremote gdrive://<your-folder-id>
+            dvc remote add -d myremote gdrive://1Jvkdcrz6qzsMos5noFWARI1kYy_DQ9Ay
           else
             # Modify the remote configuration to point to the correct service account file
             dvc remote modify myremote gdrive_service_account_file gdrive-service-account.json
