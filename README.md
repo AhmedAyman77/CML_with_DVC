@@ -25,7 +25,7 @@ git status
 dvc init
 dvc add data.csv
 dvc remote add --default myremote gdrive://<fodler-id> # if using gdrive
-# to push without asking for authentication
+# to push without asking for authenticate
 dvc remote modify your_dvc_remote_name gdrive_use_service_account true
 dvc remote modify your_dvc_remote_name gdrive_service_account_json_file_path "path/to/json/file"
 dvc push

@@ -15,17 +15,20 @@ jobs:
       - uses: iterative/setup-cml@v1
 
 
+
       - name: Prepare Environment
-        env:
-          GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
         run: |
-          # Your ML workflow goes here
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
+      - name: Setup DVC
+        run: |
+          echo "${{ secrets.GDRIVE_CREDENTIALS }}" > gdrive-service-account.json
+          dvc remote modify myremote gdrive_service_account_json_file gdrive-service-account.json
           dvc pull
           python main.py
-          dvc add ./data/ ./models/
-          dvc push
+          # dvc add ./data/ ./models/
+          # dvc push
 
       - name: Generate Report
         env:
