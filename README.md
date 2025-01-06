@@ -1,4 +1,4 @@
-## `Churn Detection with use of CML & DVC Tools `
+## `Churn Detection with use of DVC Tools `
     * Using different approaches for solving imbalancing dataset.
     * Using different Algorithms also.
 -----------------------------------------------------------------
