@@ -30,7 +30,6 @@ jobs:
         env:
           GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
         run: |
-          # Upgrade pip
           python -m pip install --upgrade pip
           
           # Install dependencies from requirements.txt
