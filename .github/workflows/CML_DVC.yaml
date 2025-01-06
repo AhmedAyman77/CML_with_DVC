@@ -32,8 +32,11 @@ jobs:
         run: |
           # Upgrade pip
           python -m pip install --upgrade pip
-          # Install dependencies
+          
+          # Install dependencies from requirements.txt
           pip install -r requirements.txt
+
+          # Install DVC with Google Drive support
           pip install dvc[gs]
 
           # Save the credentials data to a JSON file
@@ -41,8 +44,9 @@ jobs:
 
           # Check if the remote already exists. If not, add it. If it exists, just modify it.
           if ! dvc remote list | grep -q "myremote"; then
-            dvc remote add -d myremote gdrive://1Jvkdcrz6qzsMos5noFWARI1kYy_DQ9Ay
+            dvc remote add -d myremote gdrive://<your-folder-id>
           else
+            # Modify the remote configuration to point to the correct service account file
             dvc remote modify myremote gdrive_service_account_file gdrive-service-account.json
           fi
 
